@@ -1,6 +1,6 @@
 import { stopSubmit } from "redux-form";
 import { securityAPI } from "../api/security-api";
-import { authAPI, MeResultCode } from "../api/autch-api";
+import { authAPI, MeResultCode } from "../api/auth-api";
 import { BaseThunkAction, InferActionsTypes } from "./redux-store";
 
 let initialState = {

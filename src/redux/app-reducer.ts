@@ -1,5 +1,5 @@
 import {getAuthUserData} from "./auth-reducer";
-import { BaseThunkAction, InferActionsTypes } from "./redux-store";
+import { InferActionsTypes } from "./redux-store";
 
 let initialState = {
     initialized: false
@@ -38,5 +38,5 @@ export type InitialStateType = typeof initialState
 
 type ActionsTypes = InferActionsTypes<typeof actions>
 
-type ThunkActionType = BaseThunkAction<ActionsTypes>
+// type ThunkActionType = BaseThunkAction<ActionsTypes>
 

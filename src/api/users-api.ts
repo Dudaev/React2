@@ -1,6 +1,6 @@
 import { UserType } from "../types/types";
 import { instance } from "./api";
-import { MyResponseType } from "./autch-api";
+import { MyResponseType } from "./auth-api";
 
 type GetUsersTypes = {
     items: Array<UserType>
@@ -13,10 +13,12 @@ export const usersAPI = {
         const response = await instance.get<GetUsersTypes>(`users?page=${currentPage}&count=${pageSize}`);
         return response.data;
     },
-    follow(userId: number) {
-        return instance.post<MyResponseType>(`follow/${userId}`)
+    async follow(userId: number) {
+        const response = await instance.post<MyResponseType>(`follow/${userId}`)
+        return response.data;
     },
-    unfollow(userId: number) {
-        return instance.delete(`follow/${userId}`)
+    async unfollow(userId: number) {
+        const response = await instance.delete(`follow/${userId}`)
+        return response.data as Promise<MyResponseType>;
     }
 }

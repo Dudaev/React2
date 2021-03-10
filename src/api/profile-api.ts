@@ -1,6 +1,6 @@
 import { PhotosType, ProfileType } from "../types/types";
 import { instance } from "./api";
-import { MyResponseType } from "./autch-api";
+import { MyResponseType } from "./auth-api";
 
 export const profileAPI = {
     async getProfile(userId: number) {
