@@ -2,19 +2,19 @@ import { Field, Form, Formik } from 'formik';
 import React from 'react';
 import { FilterType } from '../../redux/users-reducer';
 
-const usersSearchFormValidate = (values: any) => {
+const usersSearchFormValidate = () => {
     const errors = {};
     return errors;
   }
 
 type PropsType = {
-    onPageChanged: (num: number, filter: FilterType) => void
+    onPageChanged: (filter: FilterType) => void
 }
 
 export const UsersSearchForm: React.FC<PropsType> = React.memo((props) => {
 
     const submit = (values: FilterType, { setSubmitting } : {setSubmitting: (isSubmitting: boolean) => void}) => {
-        props.onPageChanged(1, values)
+        props.onPageChanged(values)
         setSubmitting(false);
       }
 
