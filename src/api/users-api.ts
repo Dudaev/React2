@@ -9,8 +9,8 @@ type GetUsersTypes = {
 }
 
 export const usersAPI = {
-    async getUsers(currentPage = 1, pageSize = 10) {
-        const response = await instance.get<GetUsersTypes>(`users?page=${currentPage}&count=${pageSize}`);
+    async getUsers(currentPage = 1, pageSize = 10, term = '', friend: null | boolean = null) {
+        const response = await instance.get<GetUsersTypes>(`users?page=${currentPage}&count=${pageSize}&term=${term}&friend=${friend}`);
         return response.data;
     },
     async follow(userId: number) {

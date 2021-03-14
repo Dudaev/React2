@@ -1,18 +1,19 @@
 import React, {useState} from 'react';
 import styles from "./Paginator.module.css";
 import cn from "classnames";
+import { FilterType } from '../../../redux/users-reducer';
 
 type PropsType = {
     totalItemsCount: number
     pageSize: number
     currentPage?: number
-    onPageChanged?: (pageNumber: number) => void 
+    onPageChanged?: (pageNumber: number, filter: FilterType) => void 
     portionSize?: number
+    filter: FilterType
 }
 
 
-let Paginator: React.FC<PropsType> = ({totalItemsCount, pageSize, currentPage = 1, onPageChanged = x => x, portionSize = 10}) => {
-
+let Paginator: React.FC<PropsType> = ({filter, totalItemsCount, pageSize, currentPage = 1, onPageChanged = x => x, portionSize = 10}) => {
     let pagesCount = Math.ceil(totalItemsCount / pageSize);
 
     let pages = [];
@@ -38,7 +39,7 @@ let Paginator: React.FC<PropsType> = ({totalItemsCount, pageSize, currentPage = 
                 }, styles.pageNumber) }
                              key={p}
                              onClick={(e) => {
-                                 onPageChanged(p);
+                                 onPageChanged(p, filter);
                              }}>{p}</span>
             })}
         { portionCount > portionNumber &&
