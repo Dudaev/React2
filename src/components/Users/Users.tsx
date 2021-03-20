@@ -5,6 +5,8 @@ import { getCurrentPage, getfilter, getFollowingInProgress, getPageSize, getTota
 import Paginator from "../common/Paginator/Paginator";
 import User from "./User";
 import { UsersSearchForm } from './UsersSearchForm';
+import * as queryString from 'query-string'
+import { useHistory } from "react-router-dom";
 
 export const Users: React.FC = () => {
     const dispatch = useDispatch()
@@ -15,6 +17,7 @@ export const Users: React.FC = () => {
     const totalUsersCount = useSelector(getTotalUsersCount)
     const currentPage = useSelector(getCurrentPage)
     const filter = useSelector(getfilter)
+    const history = useHistory()
 
     const follow = (userId: number) => {
         dispatch(follow(userId));
@@ -24,18 +27,46 @@ export const Users: React.FC = () => {
     }
 
     const onPageChanged = (pageNumber: number ) => {
+        debugger
+        history.push({
+            pathname: '/users',
+            search: `?term=${filter.term}&friend=${filter.friend}&page=${pageNumber}`
+        })
         dispatch(requestUsers(pageNumber, pageSize, filter));
     }
     const onFilterChanged = (filter: FilterType ) => {
+        history.push({
+            pathname: '/users',
+            search: `?term=${filter.term}&friend=${filter.friend}&page=${actualPage}`
+        })
         dispatch(requestUsers(1, pageSize, filter));
     }
 
+    const parsed: {
+        term?: string
+        friend?: 'true' | 'false' | 'null'
+        page?: string
+    } = queryString.parse(history.location.search)
+    const actualFilter = {...filter}
+    let actualPage = currentPage
+
+    if (parsed.term) {
+        actualFilter.term = parsed.term
+    }
+    if (parsed.friend) {
+        actualFilter.friend = parsed.friend === 'true' ? true : parsed.friend === 'false' ? false : null
+    }
+    if (parsed.page && parsed.page !== '1') {
+        actualPage = +parsed.page
+    }
+
     useEffect(() => {
-        dispatch( requestUsers(1, pageSize, filter));
+        dispatch(requestUsers(actualPage, pageSize, actualFilter))
     }, [])
 
+
     return <div>
-        <UsersSearchForm onPageChanged={onFilterChanged}/>
+        <UsersSearchForm onFilterChanged={onFilterChanged} initialValue={actualFilter}/>
         <Paginator currentPage={currentPage} onPageChanged={onPageChanged}
                    totalItemsCount={totalUsersCount} pageSize={pageSize} filter={filter}/>
         <div>
