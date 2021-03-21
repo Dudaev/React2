@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FilterType, requestUsers } from '../../redux/users-reducer';
+import { FilterType, UserFollow, requestUsers, UserUnfollow } from '../../redux/users-reducer';
 import { getCurrentPage, getfilter, getFollowingInProgress, getPageSize, getTotalUsersCount, getUsers } from '../../redux/users-selectors';
 import Paginator from "../common/Paginator/Paginator";
 import User from "./User";
@@ -20,10 +20,10 @@ export const Users: React.FC = () => {
     const history = useHistory()
 
     const follow = (userId: number) => {
-        dispatch(follow(userId));
+        dispatch(UserFollow(userId));
     }
     const unfollow = (userId: number) => {
-        dispatch(unfollow(userId));
+        dispatch(UserUnfollow(userId));
     }
 
     const onPageChanged = (pageNumber: number ) => {

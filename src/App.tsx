@@ -1,17 +1,23 @@
 import React, {Component} from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
-import {BrowserRouter, Redirect, Route, Switch, withRouter} from "react-router-dom";
+import {BrowserRouter, Link, Redirect, Route, Switch, withRouter} from "react-router-dom";
 
 import {UsersContainer} from "./components/Users/UsersContainer";
-import HeaderContainer from "./components/Header/HeaderContainer";
 import LoginPage from "./components/Login/Login";
 import {connect, Provider} from "react-redux";
 import {compose} from "redux";
-import {initializeApp, InitialStateType} from "./redux/app-reducer";
+import {initializeApp} from "./redux/app-reducer";
 import Preloader from "./components/common/Preloader/Preloader";
 import store, { AppStateType } from "./redux/redux-store";
 import {withSuspense} from "./hoc/withSuspense";
+
+import { Layout, Menu, Breadcrumb } from 'antd';
+import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import Header from './components/Header/Header';
+
+const { SubMenu } = Menu;
+const { Content, Sider } = Layout;
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
@@ -29,26 +35,69 @@ class App extends Component<AppType & MapPropsType> {
     catchAllUnhandledErrors = () => {
         alert("Some error occured");
         //console.error(promiseRejectionEvent);
-    }
-    componentDidMount() {
+      }
+      componentDidMount() {
         this.props.initializeApp();
         window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
     }
     componentWillUnmount() {
         window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors);
     }
-
+    
     render() {
-        if (!this.props.initialized) {
-            return <Preloader/>
+      if (!this.props.initialized) {
+          return <Preloader/>
         }
 
         return (
-            <div className='app-wrapper'>
-                <HeaderContainer/>
-                <Navbar/>
-                <div className='app-wrapper-content'>
-                    <Switch>
+
+            <Layout>
+
+    <Header />
+    <Layout>
+      <Sider width={200} className="site-layout-background">
+        <Menu
+          mode="inline"
+        //   defaultSelectedKeys={['5']}
+        //   defaultOpenKeys={['sub1']}
+          style={{ height: '100%', borderRight: 0 }}
+        >
+          <SubMenu key="sub1" icon={<UserOutlined />} title="Profile">
+            <Menu.Item key="1"><Link to="/profile">Profile</Link></Menu.Item>
+            <Menu.Item key="2"><Link to="/dialogs">Messages</Link></Menu.Item>
+            <Menu.Item key="3">option3</Menu.Item>
+            <Menu.Item key="4">option4</Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub2" icon={<LaptopOutlined />} title="Users">
+            <Menu.Item key="5"><Link to="/users">Users</Link></Menu.Item>
+            <Menu.Item key="6">option6</Menu.Item>
+            <Menu.Item key="7">option7</Menu.Item>
+            <Menu.Item key="8">option8</Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub3" icon={<NotificationOutlined />} title="subnav 3">
+            <Menu.Item key="9">option9</Menu.Item>
+            <Menu.Item key="10">option10</Menu.Item>
+            <Menu.Item key="11">option11</Menu.Item>
+            <Menu.Item key="12">option12</Menu.Item>
+          </SubMenu>
+        </Menu>
+      </Sider>
+      <Layout style={{ padding: '0 24px 24px' }}>
+        <Breadcrumb style={{ margin: '16px 0' }}>
+          <Breadcrumb.Item>Home</Breadcrumb.Item>
+          <Breadcrumb.Item>List</Breadcrumb.Item>
+          <Breadcrumb.Item>App</Breadcrumb.Item>
+        </Breadcrumb>
+        <Content
+          className="site-layout-background"
+          style={{
+            padding: 24,
+            margin: 0,
+            minHeight: 280,
+          }}
+        >
+          
+          <Switch>
                         <Route exact path='/'
                                render={() => <Redirect to={"/profile"}/>}/>
 
@@ -65,11 +114,14 @@ class App extends Component<AppType & MapPropsType> {
                                render={() => <LoginPage/>}/>
 
                         <Route path='*'
-                               render={() => <div>404 NOT FOUND</div>}/>
+                               render={() => <div>404 NOT FOUND </div>}/>
                     </Switch>
 
-                </div>
-            </div>
+          
+        </Content>
+      </Layout>
+    </Layout>
+  </Layout>
         )
     }
 }
