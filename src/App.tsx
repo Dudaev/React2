@@ -15,15 +15,18 @@ import {withSuspense} from "./hoc/withSuspense";
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import Header from './components/Header/Header';
+// import ChatPage from './components/chat/ChatPage';
 
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+const ChatPageContainer = React.lazy(() => import('./components/chat/ChatPage'));
 
 const SuspenseDialogsContainer  = withSuspense(DialogsContainer)
 const SuspenseProfileContainer = withSuspense(ProfileContainer)
+const SuspenseChatPageContainer = withSuspense(ChatPageContainer)
 
 type AppType = {
     initializeApp: () => void
@@ -112,6 +115,9 @@ class App extends Component<AppType & MapPropsType> {
 
                         <Route path='/login'
                                render={() => <LoginPage/>}/>
+                               
+                        <Route path='/chatPage'
+                               render={() => <SuspenseChatPageContainer />}/>
 
                         <Route path='*'
                                render={() => <div>404 NOT FOUND </div>}/>
